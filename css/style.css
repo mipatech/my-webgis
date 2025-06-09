@@ -1,0 +1,21 @@
+/* Font globale */
+body, .x-panel, .x-window {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Header barra titolo mappa */
+.x-panel-header {
+  background: #004b88 url('../img/logo.svg') 8px center no-repeat;
+  color: #fff;
+  font-weight: 700;
+  padding-left: 48px; /* spazio per il logo */
+}
+
+/* Leggibilità layer‑tree */
+.x-tree-node-leaf .x-tree-node-icon  {display:none;}
+.x-tree-node-leaf .x-tree-node-el span {font-size: 14px;}
+
+/* Evidenzia poligono selezionato */
+. olLayerGooglePoweredBy {
+  display:none;
+}
