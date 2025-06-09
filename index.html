@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <title>WebGIS – Heron MC + GeoJSON</title>
+
+  <!-- ===== Librerie da CDN ===== -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/extjs/3.4.1-1/resources/css/ext-all.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/extjs/3.4.1-1/adapter/ext/ext-base.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/extjs/3.4.1-1/ext-all.js"></script>
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/theme/default/style.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/geoext/1.1/script/GeoExt.js"></script>
+
+  <!-- Heron MC (script + fogli stile) -->
+  <script src="https://cdn.jsdelivr.net/gh/heron-mc/heron-mc@master/heron/script/Heron.js"></script>
+  <link  rel="stylesheet"
+         href="https://cdn.jsdelivr.net/gh/heron-mc/heron-mc@master/heron/resources/css/default.css" />
+
+  <!-- Tema & personalizzazioni -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" type="image/png" href="img/favicon.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <!-- L'intera app viene generata da Heron MC, il body può rimanere vuoto -->
+<script type="text/javascript">
+  // ================== CONFIG ====================
+  Heron.layout = {                 // nodo radice ExtJS
+    xtype : 'hr_mappanel',
+    id    : 'mappa',
+    title : 'Demo WebGIS',
+    height: 1000,                  // full‑screen
+    hropts: {
+      projection   : 'EPSG:3857',
+      units        : 'm',
+      center       : [12.4964, 41.9028], // Roma (lon,lat WGS84)
+      zoom         : 6,
+      baselayers   : [
+        new OpenLayers.Layer.OSM( "OpenStreetMap" )
+      ],
+      layers : [
+        // --- GeoJSON locale come vettore ---
+        new OpenLayers.Layer.Vector(
+          "Aree progetto",
+          {
+            protocol  : new OpenLayers.Protocol.HTTP({
+              url   : 'data/aree_progetto.geojson',
+              format : new OpenLayers.Format.GeoJSON()
+            }),
+            strategies: [ new OpenLayers.Strategy.Fixed() ],
+            styleMap  : new OpenLayers.StyleMap({
+              "default": new OpenLayers.Style({
+                 fillColor      : "#2b83ba",
+                 strokeColor    : "#ffffff",
+                 strokeWidth    : 1,
+                 fillOpacity    : 0.6,
+                 pointRadius    : 6
+              })
+            })
+          }
+        )
+      ],
+      toolbar   : [ 'pan', 'zoombox', 'separator', 'print', 'measurelength', 'measurearea'],
+      // pannelli laterali
+      westPanel : {
+        xtype   : 'tabpanel',
+        width   : 300,
+        items   : [
+          {xtype: 'hr_layertreepanel', title: 'Layer', autoScroll: true},
+          {xtype: 'hr_legendpanel',    title: 'Legenda', autoScroll: true}
+        ]
+      },
+      infoPanel : { // popup con attributi al click
+        xtype        : 'hr_featureinfopopup',
+        title        : 'Informazioni',
+        displayPanel: { xtype: 'propertygrid', autoHeight: true }
+      }
+    }
+  };
+  // Avvia l’app
+  Heron.App.init();
+</script>
+</body>
+</html>
