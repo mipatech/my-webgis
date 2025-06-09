@@ -35,51 +35,54 @@
     title : 'Demo WebGIS',
     height: 1000,                  // full‑screen
     hropts: {
-      projection   : 'EPSG:3857',
-      units        : 'm',
-      center       : [12.4964, 41.9028], // Roma (lon,lat WGS84)
-      zoom         : 6,
-      baselayers   : [
-        new OpenLayers.Layer.OSM( "OpenStreetMap" )
-      ],
-      layers : [
-        // --- GeoJSON locale come vettore ---
-        new OpenLayers.Layer.Vector(
-          "Aree progetto",
-          {
-            protocol  : new OpenLayers.Protocol.HTTP({
-              url   : 'data/aree_progetto.geojson',
-              format : new OpenLayers.Format.GeoJSON()
-            }),
-            strategies: [ new OpenLayers.Strategy.Fixed() ],
-            styleMap  : new OpenLayers.StyleMap({
-              "default": new OpenLayers.Style({
-                 fillColor      : "#2b83ba",
-                 strokeColor    : "#ffffff",
-                 strokeWidth    : 1,
-                 fillOpacity    : 0.6,
-                 pointRadius    : 6
-              })
-            })
-          }
-        )
-      ],
-      toolbar   : [ 'pan', 'zoombox', 'separator', 'print', 'measurelength', 'measurearea'],
-      // pannelli laterali
-      westPanel : {
-        xtype   : 'tabpanel',
-        width   : 300,
-        items   : [
-          {xtype: 'hr_layertreepanel', title: 'Layer', autoScroll: true},
-          {xtype: 'hr_legendpanel',    title: 'Legenda', autoScroll: true}
-        ]
-      },
-      infoPanel : { // popup con attributi al click
-        xtype        : 'hr_featureinfopopup',
-        title        : 'Informazioni',
-        displayPanel: { xtype: 'propertygrid', autoHeight: true }
+  projection   : 'EPSG:3857',
+  units        : 'm',
+  center       : OpenLayers.Projection.transform(
+    [12.4964, 41.9028],
+    new OpenLayers.Projection("EPSG:4326"),
+    new OpenLayers.Projection("EPSG:3857")
+  ),
+  zoom         : 6,
+  baselayers   : [
+    new OpenLayers.Layer.OSM("OpenStreetMap")
+  ],
+  layers : [
+    new OpenLayers.Layer.Vector(
+      "Aree progetto",
+      {
+        protocol  : new OpenLayers.Protocol.HTTP({
+          url   : 'data/aree_progetto.geojson',
+          format : new OpenLayers.Format.GeoJSON()
+        }),
+        strategies: [ new OpenLayers.Strategy.Fixed() ],
+        styleMap  : new OpenLayers.StyleMap({
+          "default": new OpenLayers.Style({
+             fillColor      : "#2b83ba",
+             strokeColor    : "#ffffff",
+             strokeWidth    : 1,
+             fillOpacity    : 0.6,
+             pointRadius    : 6
+          })
+        })
       }
-    }
+    )
+  ],
+  toolbar   : [ 'pan', 'zoombox', 'separator', 'print', 'measurelength', 'measurearea'],
+  westPanel : {
+    xtype   : 'tabpanel',
+    width   : 300,
+    items   : [
+      {xtype: 'hr_layertreepanel', title: 'Layer', autoScroll: true},
+      {xtype: 'hr_legendpanel',    title: 'Legenda', autoScroll: true}
+    ]
+  },
+  infoPanel : {
+    xtype        : 'hr_featureinfopopup',
+    title        : 'Informazioni',
+    displayPanel: { xtype: 'propertygrid', autoHeight: true }
+  }
+}
+
   };
   // Avvia l’app
   Heron.App.init();
